@@ -11,9 +11,21 @@ defaultConfig.users = [
         userName: 'changeMe'
     }
 ];
-defaultConfig.protectedPaths = [
-    '/song',
-    '/search'
-];
+defaultConfig.protectedPaths = {
+    express: [
+        '/song',
+        '/search'
+    ],
+    socketio: [
+        'addToQueue',
+        'removeFromQueue',
+        'moveInQueue',
+        'startPlayback',
+        'pausePlayback',
+        'skipSongs',
+        'shuffleQueue',
+        'setVolume'
+    ]
+};
 
 module.exports = defaultConfig;
