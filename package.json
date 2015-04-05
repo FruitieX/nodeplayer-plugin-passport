@@ -1,0 +1,38 @@
+{
+  "name": "nodeplayer-plugin-passport",
+  "version": "0.1.5",
+  "description": "Provides authentication for express and/or socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FruitieX/nodeplayer-plugin-passport.git"
+  },
+  "author": "FruitieX",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FruitieX/nodeplayer-plugin-passport/issues"
+  },
+  "homepage": "https://github.com/FruitieX/nodeplayer-plugin-passport",
+  "dependencies": {
+    "express": "^4.12.3",
+    "express-session": "^1.10.4",
+    "jade": "^1.9.2",
+    "nodeplayer": "*",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "password-hash": "^1.2.2",
+    "underscore": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "istanbul": "^0.3.8",
+    "jscs": "^1.11.3",
+    "mocha": "^2.2.1",
+    "mocha-jscs": "^1.0.2",
+    "mocha-jshint": "^1.0.0",
+    "underscore": "^1.8.2"
+  }
+}
