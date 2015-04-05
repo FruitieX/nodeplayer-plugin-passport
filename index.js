@@ -7,6 +7,9 @@ var LocalStrategy = require('passport-local').Strategy;
 var passwordHash = require('password-hash');
 var express = require('express');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var FileStore = require('session-file-store')(session);
+var passportSocketIo = require('passport.socketio');
 
 var _ = require('underscore');
 var fs = require('fs');
@@ -17,14 +20,49 @@ var defaultConfig = require('./default-config.js');
 var config = nodeplayerConfig.getConfig(MODULE_NAME, defaultConfig);
 
 exports.init = function(player, logger, callback) {
-    // dependencies
-    if (!player.plugins.express) {
-        callback('module must be initialized after express module!');
+    var storeInstance = new FileStore();
+
+    // socketio protection
+    if (config.protectedPaths.socketio && !player.plugins.socketio) {
+        logger.warn('socketio paths configured to be protected, module must be ' +
+                'initialized after socketio module! Disabling socketio paths protection. ' +
+                'To remove this warning, remove the "socketio" property of ' +
+                '"protectedPaths" in plugin-passport.json.');
+    } else {
+        var onAuthorizeSuccess = function(data, accept) {
+            accept();
+        };
+        var onAuthorizeFail = function(data, message, error, accept) {
+            if(error)  throw new Error(message);
+            // accept everyone
+            return accept();
+        };
+        player.socketio.use(passportSocketIo.authorize({
+            cookieParser: cookieParser,
+            key:         'connect.sid',
+            secret:      config.secret,
+            store:       storeInstance,
+            success:     onAuthorizeSuccess,
+            fail:        onAuthorizeFail,
+        }));
+        player.socketio.protectedPaths = config.protectedPaths.socketio;
+        _.each(config.protectedPaths.socketio, function(path) {
+            logger.verbose('protecting socketio path: ' + path);
+        });
+    }
+
+    // expressjs protection
+    if (config.protectedPaths.express && !player.plugins.express) {
+        logger.warn('express paths configured to be protected, module must be ' +
+                'initialized after express module! Disabling express paths protection. ' +
+                'To remove this warning, remove the "express" property of ' +
+                '"protectedPaths" in plugin-passport.json.');
     } else {
         player.app.use(session({
             secret: config.secret,
             resave: true,
-            saveUninitialized: false
+            saveUninitialized: false,
+            store: storeInstance
         }));
         player.app.use(passport.initialize());
         player.app.use(passport.session());
@@ -81,10 +119,12 @@ exports.init = function(player, logger, callback) {
             res.status(403).end('Login required');
         };
 
-        _.each(config.protectedPaths, function(path) {
+        _.each(config.protectedPaths.express, function(path) {
+            logger.verbose('protecting express path: ' + path);
             player.app.use(path, ensureAuthenticated);
         });
 
-        callback();
     }
+
+    callback();
 };
