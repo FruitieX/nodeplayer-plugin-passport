@@ -1,8 +1,10 @@
 var crypto = require('crypto');
+var path = require('path');
 var nodeplayerConfig = require('nodeplayer').config;
 
 var defaultConfig = {};
 
+defaultConfig.sessionStore = path.join(nodeplayerConfig.getBaseDir(), 'sessions');
 defaultConfig.secret = crypto.randomBytes(20).toString('hex');
 defaultConfig.users = [
     {

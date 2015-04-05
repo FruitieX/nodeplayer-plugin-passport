@@ -20,7 +20,9 @@ var defaultConfig = require('./default-config.js');
 var config = nodeplayerConfig.getConfig(MODULE_NAME, defaultConfig);
 
 exports.init = function(player, logger, callback) {
-    var storeInstance = new FileStore();
+    var storeInstance = new FileStore({
+        path: config.sessionStore
+    });
 
     // socketio protection
     if (config.protectedPaths.socketio && !player.plugins.socketio) {
@@ -33,7 +35,9 @@ exports.init = function(player, logger, callback) {
             accept();
         };
         var onAuthorizeFail = function(data, message, error, accept) {
-            if (error) {throw new Error(message);}
+            if (error) {
+                logger.warn('passport.socketio authorization failed ' + message);
+            }
             // accept everyone
             return accept();
         };
