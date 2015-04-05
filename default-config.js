@@ -15,6 +15,7 @@ defaultConfig.protectedPaths = {
     express: [
         '/song',
         '/queue/del',
+        '/queue/move',
         '/playctl',
         '/volume'
     ],
