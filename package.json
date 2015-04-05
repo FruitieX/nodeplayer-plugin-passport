@@ -1,6 +1,6 @@
 {
   "name": "nodeplayer-plugin-passport",
-  "version": "0.1.5",
+  "version": "0.1.51",
   "description": "Provides authentication for express and/or socket.io",
   "main": "index.js",
   "scripts": {
