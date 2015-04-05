@@ -33,7 +33,7 @@ exports.init = function(player, logger, callback) {
             accept();
         };
         var onAuthorizeFail = function(data, message, error, accept) {
-            if(error)  throw new Error(message);
+            if (error) {throw new Error(message);}
             // accept everyone
             return accept();
         };
