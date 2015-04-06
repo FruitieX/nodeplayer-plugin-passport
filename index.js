@@ -21,7 +21,8 @@ var config = nodeplayerConfig.getConfig(MODULE_NAME, defaultConfig);
 
 exports.init = function(player, logger, callback) {
     var storeInstance = new FileStore({
-        path: config.sessionStore
+        path: config.sessionStore,
+        ttl: config.sessionTtl
     });
 
     // socketio protection
@@ -66,7 +67,10 @@ exports.init = function(player, logger, callback) {
             secret: config.secret,
             resave: true,
             saveUninitialized: false,
-            store: storeInstance
+            store: storeInstance,
+            cookie: {
+                expires: new Date(new Date().getTime() + config.sessionTtl * 1000)
+            }
         }));
         player.app.use(passport.initialize());
         player.app.use(passport.session());
@@ -107,7 +111,9 @@ exports.init = function(player, logger, callback) {
                 }
                 req.logIn(user, function(err) {
                     if (err) {return next(err);}
-                    res.cookie('username', user.userName);
+                    res.cookie('username', user.userName, {
+                        expires: new Date(new Date().getTime() + config.sessionTtl * 1000)
+                    });
                     return res.end('Login successful');
                 });
             })(req, res, next);

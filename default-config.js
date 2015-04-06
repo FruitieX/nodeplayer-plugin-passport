@@ -5,6 +5,7 @@ var nodeplayerConfig = require('nodeplayer').config;
 var defaultConfig = {};
 
 defaultConfig.sessionStore = path.join(nodeplayerConfig.getBaseDir(), 'sessions');
+defaultConfig.sessionTtl = 24 * 60 * 60; // one day
 defaultConfig.secret = crypto.randomBytes(20).toString('hex');
 defaultConfig.users = [
     {
