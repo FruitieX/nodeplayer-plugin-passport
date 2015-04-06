@@ -112,7 +112,7 @@ exports.init = function(player, logger, callback) {
                 req.logIn(user, function(err) {
                     if (err) {return next(err);}
                     res.cookie('username', user.userName, {
-                        expires: new Date(new Date().getTime() + config.sessionTtl * 1000)
+                        expires: new Date(2050, 1, 1)
                     });
                     return res.end('Login successful');
                 });
