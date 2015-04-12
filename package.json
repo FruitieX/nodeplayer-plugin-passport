@@ -26,6 +26,7 @@
     "passport-local": "^1.0.0",
     "passport.socketio": "^3.5.0",
     "password-hash": "^1.2.2",
+    "readline-sync": "^0.8.0",
     "session-file-store": "0.0.3",
     "underscore": "^1.8.2"
   },
