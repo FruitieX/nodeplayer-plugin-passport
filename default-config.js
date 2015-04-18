@@ -17,14 +17,19 @@ defaultConfig.users = [
 defaultConfig.protectedPaths = {
     express: [
         '/song',
+        '/search',
+        '/queue',
+        '/queue/add',
         '/queue/del',
         '/queue/move',
         '/playctl',
         '/volume'
     ],
     socketio: [
+        'addToQueue',
         'removeFromQueue',
         'moveInQueue',
+        'searchBackends',
         'startPlayback',
         'pausePlayback',
         'skipSongs',
